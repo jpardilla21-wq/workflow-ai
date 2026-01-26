@@ -73,8 +73,31 @@ export default function Pricing() {
         </p>
       </div>
 
+      {/* Success/Cancel Messages */}
+      {success && (
+        <div className="max-w-4xl mx-auto px-6 mb-8">
+          <Alert className="border-green-200 bg-green-50">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+            <AlertDescription className="text-green-900">
+              <strong>Welcome to Premium!</strong> Your subscription is now active. Enjoy unlimited workflows!
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+
+      {canceled && (
+        <div className="max-w-4xl mx-auto px-6 mb-8">
+          <Alert className="border-amber-200 bg-amber-50">
+            <Sparkles className="h-4 w-4 text-amber-600" />
+            <AlertDescription className="text-amber-900">
+              Checkout canceled. You can upgrade anytime when you're ready!
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+
       {/* Current Plan Alert */}
-      {user && (
+      {user && !success && !canceled && (
         <div className="max-w-4xl mx-auto px-6 mb-8">
           <Alert className="border-indigo-200 bg-indigo-50">
             <Sparkles className="h-4 w-4 text-indigo-600" />
@@ -200,10 +223,20 @@ export default function Pricing() {
               ) : (
                 <Button 
                   onClick={handleUpgrade}
+                  disabled={loading}
                   className="w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
                 >
-                  <Crown className="w-5 h-5 mr-2" />
-                  Upgrade to Premium
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Crown className="w-5 h-5 mr-2" />
+                      Upgrade to Premium
+                    </>
+                  )}
                 </Button>
               )}
             </CardContent>
