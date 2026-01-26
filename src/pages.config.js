@@ -1,23 +1,23 @@
-import Home from './pages/Home';
 import AIBuilder from './pages/AIBuilder';
+import Auth from './pages/Auth';
+import Home from './pages/Home';
 import MyWorkflows from './pages/MyWorkflows';
 import Pricing from './pages/Pricing';
-import WorkflowDetail from './pages/WorkflowDetail';
-import Auth from './pages/Auth';
-import Templates from './pages/Templates';
 import TemplateDetail from './pages/TemplateDetail';
+import Templates from './pages/Templates';
+import WorkflowDetail from './pages/WorkflowDetail';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Home": Home,
     "AIBuilder": AIBuilder,
+    "Auth": Auth,
+    "Home": Home,
     "MyWorkflows": MyWorkflows,
     "Pricing": Pricing,
-    "WorkflowDetail": WorkflowDetail,
-    "Auth": Auth,
-    "Templates": Templates,
     "TemplateDetail": TemplateDetail,
+    "Templates": Templates,
+    "WorkflowDetail": WorkflowDetail,
 }
 
 export const pagesConfig = {

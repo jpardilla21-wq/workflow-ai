@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { createPageUrl } from '../utils';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Check, Crown, Sparkles, Zap } from 'lucide-react';
+import { Check, Crown, Sparkles, Zap, Loader2, CheckCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export default function Pricing() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -22,9 +24,37 @@ export default function Pricing() {
     fetchUser();
   }, []);
 
-  const handleUpgrade = () => {
-    alert('Payment integration coming soon! This would redirect to a payment page.');
+  const handleUpgrade = async () => {
+    if (!user) {
+      base44.auth.redirectToLogin(window.location.pathname);
+      return;
+    }
+
+    // Check if running in iframe (preview)
+    if (window.self !== window.top) {
+      alert('Checkout is only available from the published app. Please publish your app to process payments.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data } = await base44.functions.invoke('createCheckout', {
+        priceId: 'price_1StssQCspH9MHEn6I8VCoXmP'
+      });
+
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+      }
+    } catch (error) {
+      alert('Failed to start checkout. Please try again.');
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const success = searchParams.get('success');
+  const canceled = searchParams.get('canceled');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50">
