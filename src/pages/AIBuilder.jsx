@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { Sparkles, Loader2, AlertCircle, Crown } from 'lucide-react';
+import { Sparkles, Loader2, AlertCircle, Crown, Upload, Image as ImageIcon } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from 'react-router-dom';
+import OnboardingFlow from '../components/tutorial/OnboardingFlow';
+import ContextualHelp from '../components/tutorial/ContextualHelp';
 
 export default function AIBuilder() {
   const navigate = useNavigate();
@@ -18,6 +20,8 @@ export default function AIBuilder() {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [workflowCount, setWorkflowCount] = useState(0);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,6 +32,12 @@ export default function AIBuilder() {
         // Count user's workflows
         const workflows = await base44.entities.Workflow.filter({ created_by: userData.email });
         setWorkflowCount(workflows.length);
+
+        // Check if user needs onboarding
+        const progress = await base44.entities.UserProgress.filter({ user_email: userData.email });
+        if (progress.length === 0 || !progress[0].onboarding_completed) {
+          setShowOnboarding(true);
+        }
       } catch (error) {
         base44.auth.redirectToLogin(window.location.pathname);
       }
@@ -48,9 +58,29 @@ export default function AIBuilder() {
     return count < 5;
   };
 
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setLoading(true);
+    try {
+      const uploadPromises = files.map(file => 
+        base44.integrations.Core.UploadFile({ file })
+      );
+      const results = await Promise.all(uploadPromises);
+      const urls = results.map(r => r.file_url);
+      setUploadedImages(prev => [...prev, ...urls]);
+      setError('');
+    } catch (err) {
+      setError('Failed to upload images');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleGenerate = async () => {
-    if (!description.trim()) {
-      setError('Please describe your automation workflow');
+    if (!description.trim() && uploadedImages.length === 0) {
+      setError('Please describe your automation or upload workflow images');
       return;
     }
 
@@ -64,7 +94,7 @@ export default function AIBuilder() {
 
     try {
       // Generate workflow with AI
-      const prompt = `Create a detailed automation workflow for: ${description}
+      let prompt = `Create a detailed automation workflow for: ${description}
 
 Platform: ${platform === 'both' ? 'n8n and Make' : platform}
 
@@ -81,6 +111,7 @@ Be extremely detailed and practical. Include actual API documentation links wher
       const result = await base44.integrations.Core.InvokeLLM({
         prompt: prompt,
         add_context_from_internet: true,
+        file_urls: uploadedImages.length > 0 ? uploadedImages : undefined,
         response_json_schema: {
           type: "object",
           properties: {
@@ -134,6 +165,15 @@ Be extremely detailed and practical. Include actual API documentation links wher
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+      {showOnboarding && user && (
+        <OnboardingFlow 
+          user={user} 
+          onComplete={() => setShowOnboarding(false)} 
+        />
+      )}
+      
+      <ContextualHelp context="ai-builder" />
+      
       <div className="max-w-4xl mx-auto px-6 lg:px-8 py-16">
         {/* Header */}
         <div className="text-center mb-12">
@@ -211,6 +251,48 @@ Be extremely detailed and practical. Include actual API documentation links wher
               </div>
             </div>
 
+            {/* Image Upload */}
+            {user?.subscription_tier === 'premium' && (
+              <div className="space-y-3">
+                <Label className="text-base">Upload Workflow Images (Premium)</Label>
+                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 text-center hover:border-indigo-400 transition-colors">
+                  <input
+                    type="file"
+                    id="image-upload"
+                    multiple
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  <label htmlFor="image-upload" className="cursor-pointer">
+                    <Upload className="w-10 h-10 text-slate-400 mx-auto mb-3" />
+                    <p className="text-sm text-slate-600 mb-1">
+                      Click to upload screenshots or diagrams
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      AI will analyze your images and generate the workflow
+                    </p>
+                  </label>
+                </div>
+
+                {uploadedImages.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {uploadedImages.map((url, idx) => (
+                      <div key={idx} className="relative">
+                        <img src={url} alt={`Upload ${idx + 1}`} className="w-20 h-20 object-cover rounded border" />
+                        <button
+                          onClick={() => setUploadedImages(prev => prev.filter((_, i) => i !== idx))}
+                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Description */}
             <div className="space-y-3">
               <Label htmlFor="description" className="text-base">
@@ -225,6 +307,7 @@ Be extremely detailed and practical. Include actual API documentation links wher
               />
               <p className="text-sm text-slate-500">
                 Be as detailed as possible. Include triggers, actions, conditions, and desired outcomes.
+                {user?.subscription_tier === 'premium' && ' Or upload workflow images above.'}
               </p>
             </div>
 
@@ -239,7 +322,7 @@ Be extremely detailed and practical. Include actual API documentation links wher
             {/* Generate Button */}
             <Button
               onClick={handleGenerate}
-              disabled={loading || !description.trim() || !canGenerateWorkflow()}
+              disabled={loading || (!description.trim() && uploadedImages.length === 0) || !canGenerateWorkflow()}
               className="w-full bg-indigo-600 hover:bg-indigo-700 h-12 text-base"
             >
               {loading ? (
