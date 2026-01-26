@@ -8,14 +8,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Download, Copy, Check, ArrowLeft, Save } from 'lucide-react';
+import { Download, Copy, Check, ArrowLeft, Save, Share2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import ShareWorkflowDialog from '../components/collaboration/ShareWorkflowDialog';
+import SharedUsersList from '../components/collaboration/SharedUsersList';
+import RealtimeCollaborators from '../components/collaboration/RealtimeCollaborators';
+import ContextualHelp from '../components/tutorial/ContextualHelp';
 
 export default function WorkflowDetail() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [copiedJson, setCopiedJson] = useState('');
   const [notes, setNotes] = useState('');
+  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [user, setUser] = useState(null);
   
   const urlParams = new URLSearchParams(window.location.search);
   const workflowId = urlParams.get('id');
@@ -32,6 +38,18 @@ export default function WorkflowDetail() {
       setNotes(workflow.notes || '');
     }
   }, [workflow]);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await base44.auth.me();
+        setUser(userData);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const updateNotesMutation = useMutation({
     mutationFn: (newNotes) => base44.entities.Workflow.update(workflowId, { notes: newNotes }),
@@ -69,6 +87,8 @@ export default function WorkflowDetail() {
     return colors[platform] || 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
+  const isOwner = user && workflow && user.email === workflow.created_by;
+
   if (isLoading || !workflow) {
     return (
       <div className="min-h-screen bg-slate-50 py-16">
@@ -85,17 +105,39 @@ export default function WorkflowDetail() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <ContextualHelp context="workflow-deployment" />
+      <ShareWorkflowDialog 
+        workflow={workflow}
+        isOpen={showShareDialog}
+        onClose={() => setShowShareDialog(false)}
+        onShared={() => queryClient.invalidateQueries(['workflow', workflowId])}
+      />
+      
       {/* Header */}
       <div className="bg-gradient-to-br from-indigo-50 to-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-6 lg:px-8 py-12">
-          <Button
-            variant="ghost"
-            onClick={() => navigate(createPageUrl('MyWorkflows'))}
-            className="mb-6"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to My Workflows
-          </Button>
+          <div className="flex items-center justify-between mb-6">
+            <Button
+              variant="ghost"
+              onClick={() => navigate(createPageUrl('MyWorkflows'))}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to My Workflows
+            </Button>
+            
+            <div className="flex items-center gap-3">
+              <RealtimeCollaborators workflowId={workflowId} />
+              {isOwner && (
+                <Button 
+                  onClick={() => setShowShareDialog(true)}
+                  className="gap-2 bg-indigo-600 hover:bg-indigo-700"
+                >
+                  <Share2 className="w-4 h-4" />
+                  Share
+                </Button>
+              )}
+            </div>
+          </div>
 
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="flex-1 min-w-0">
@@ -239,6 +281,11 @@ export default function WorkflowDetail() {
               </Card>
             )}
 
+            {/* Collaboration */}
+            {isOwner && (
+              <SharedUsersList workflowId={workflowId} isOwner={isOwner} />
+            )}
+
             {/* Personal Notes */}
             <Card className="border-slate-200">
               <CardHeader>
@@ -289,6 +336,12 @@ export default function WorkflowDetail() {
                     })}
                   </div>
                 </div>
+                {workflow.isShared && (
+                  <div>
+                    <span className="text-slate-500">Shared with:</span>
+                    <div className="font-medium">{workflow.sharedCount} user{workflow.sharedCount !== 1 ? 's' : ''}</div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
