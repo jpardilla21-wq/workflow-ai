@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../utils';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Zap, BookOpen, Crown, ArrowRight, Check } from 'lucide-react';
+import { Sparkles, Zap, Crown, ArrowRight, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Logo from '../components/Logo';
 
 export default function Home() {
   return (
@@ -19,9 +20,8 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-full mb-8">
-              <Sparkles className="w-4 h-4 text-indigo-600" />
-              <span className="text-sm font-medium text-indigo-900">Democratizing AI Automation</span>
+            <div className="flex justify-center mb-8">
+              <Logo size="large" />
             </div>
 
             <h1 className="text-5xl lg:text-7xl font-bold text-slate-900 mb-6 tracking-tight">
@@ -32,7 +32,7 @@ export default function Home() {
             </h1>
 
             <p className="text-xl text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Choose from 300+ pre-built templates or use AI to create custom n8n and Make automations. 
+              Use AI to create custom n8n and Make automations with detailed setup guides. 
               No coding required.
             </p>
 
@@ -43,9 +43,9 @@ export default function Home() {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-              <Link to={createPageUrl('Templates')}>
+              <Link to={createPageUrl('Pricing')}>
                 <Button size="lg" variant="outline" className="text-base px-8 py-6 h-auto">
-                  Browse Templates
+                  View Pricing
                 </Button>
               </Link>
             </div>
@@ -72,13 +72,12 @@ export default function Home() {
               transition={{ duration: 0.5 }}
               className="p-8 rounded-2xl bg-gradient-to-br from-indigo-50 to-white border border-indigo-100"
             >
-              <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mb-6">
-                <BookOpen className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-6">
+                <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">300+ Templates</h3>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">AI-Powered Builder</h3>
               <p className="text-slate-600 leading-relaxed">
-                Pre-built automations for sales, marketing, project management, and more. 
-                Just pick, customize, and deploy.
+                Describe your workflow in plain English. AI generates complete automations with detailed setup instructions.
               </p>
             </motion.div>
 
@@ -88,12 +87,12 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-white border border-purple-100"
             >
-              <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-6">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center mb-6">
+                <Zap className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">AI Builder</h3>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Complete Setup Guides</h3>
               <p className="text-slate-600 leading-relaxed">
-                Describe your workflow in plain English. AI generates the complete automation with setup instructions.
+                Every workflow includes step-by-step instructions, API documentation, and configuration guides.
               </p>
             </motion.div>
 
@@ -103,12 +102,12 @@ export default function Home() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="p-8 rounded-2xl bg-gradient-to-br from-amber-50 to-white border border-amber-100"
             >
-              <div className="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center mb-6">
-                <Zap className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mb-6">
+                <Crown className="w-6 h-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">Detailed Guides</h3>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">n8n & Make Support</h3>
               <p className="text-slate-600 leading-relaxed">
-                Every workflow comes with step-by-step setup instructions, API guides, and best practices.
+                Generate workflows for n8n, Make, or both platforms. Export ready-to-use JSON files instantly.
               </p>
             </motion.div>
           </div>
@@ -132,9 +131,9 @@ export default function Home() {
               <div className="w-16 h-16 bg-indigo-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-6">
                 1
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-3">Choose Your Path</h3>
+              <h3 className="text-xl font-semibold text-slate-900 mb-3">Describe Your Workflow</h3>
               <p className="text-slate-600">
-                Pick a template from our library or describe your custom automation to AI
+                Tell our AI what automation you need in plain English
               </p>
             </div>
 

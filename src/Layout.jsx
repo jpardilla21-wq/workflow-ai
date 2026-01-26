@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { base44 } from '@/api/base44Client';
-import { Sparkles, Menu, X, LogOut, User as UserIcon } from 'lucide-react';
+import { Menu, X, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import Logo from './components/Logo';
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -32,23 +33,12 @@ export default function Layout({ children, currentPageName }) {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link to={createPageUrl('Home')} className="flex items-center gap-2 group">
-              <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <Sparkles className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-semibold text-slate-900">Workflow AI</span>
+            <Link to={createPageUrl('Home')} className="group">
+              <Logo />
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              <Link 
-                to={createPageUrl('Templates')} 
-                className={`text-sm font-medium transition-colors ${
-                  currentPageName === 'Templates' ? 'text-indigo-600' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Templates
-              </Link>
               <Link 
                 to={createPageUrl('AIBuilder')} 
                 className={`text-sm font-medium transition-colors ${
@@ -115,13 +105,6 @@ export default function Layout({ children, currentPageName }) {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-slate-200 bg-white">
             <div className="px-6 py-4 space-y-4">
-              <Link 
-                to={createPageUrl('Templates')} 
-                className="block text-sm font-medium text-slate-600 hover:text-slate-900"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Templates
-              </Link>
               <Link 
                 to={createPageUrl('AIBuilder')} 
                 className="block text-sm font-medium text-slate-600 hover:text-slate-900"
