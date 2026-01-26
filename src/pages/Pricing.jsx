@@ -200,6 +200,14 @@ export default function Pricing() {
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700 font-medium">Create workflows from images</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700 font-medium">Advanced customizations</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
                   <span className="text-slate-700">n8n & Make support</span>
                 </div>
                 <div className="flex items-start gap-3">
