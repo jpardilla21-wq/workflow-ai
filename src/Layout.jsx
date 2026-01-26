@@ -40,6 +40,14 @@ export default function Layout({ children, currentPageName }) {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
               <Link 
+                to={createPageUrl('Templates')} 
+                className={`text-sm font-medium transition-colors ${
+                  currentPageName === 'Templates' ? 'text-indigo-600' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                Templates
+              </Link>
+              <Link 
                 to={createPageUrl('AIBuilder')} 
                 className={`text-sm font-medium transition-colors ${
                   currentPageName === 'AIBuilder' ? 'text-indigo-600' : 'text-slate-600 hover:text-slate-900'
@@ -105,6 +113,13 @@ export default function Layout({ children, currentPageName }) {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-slate-200 bg-white">
             <div className="px-6 py-4 space-y-4">
+              <Link 
+                to={createPageUrl('Templates')} 
+                className="block text-sm font-medium text-slate-600 hover:text-slate-900"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Templates
+              </Link>
               <Link 
                 to={createPageUrl('AIBuilder')} 
                 className="block text-sm font-medium text-slate-600 hover:text-slate-900"

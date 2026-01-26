@@ -32,7 +32,7 @@ export default function Home() {
             </h1>
 
             <p className="text-xl text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Use AI to create custom n8n and Make automations with detailed setup guides. 
+              Choose from hundreds of templates or use AI to create custom n8n and Make automations. 
               No coding required.
             </p>
 
@@ -43,9 +43,9 @@ export default function Home() {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-              <Link to={createPageUrl('Pricing')}>
+              <Link to={createPageUrl('Templates')}>
                 <Button size="lg" variant="outline" className="text-base px-8 py-6 h-auto">
-                  View Pricing
+                  Browse Templates
                 </Button>
               </Link>
             </div>
