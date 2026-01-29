@@ -1,14 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '../utils';
+import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Zap, Crown, ArrowRight, Check } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Logo from '../components/Logo';
+import OnboardingQuestions from '../components/onboarding/OnboardingQuestions';
 
 export default function Home() {
+  const [user, setUser] = useState(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await base44.auth.me();
+        setUser(userData);
+
+        // Check if user has completed onboarding profile
+        const profile = await base44.entities.UserProfile.filter({ user_email: userData.email });
+        if (profile.length === 0) {
+          setShowOnboarding(true);
+        }
+      } catch (error) {
+        setUser(null);
+      }
+    };
+    fetchUser();
+  }, []);
+
   return (
     <div className="bg-white">
+      {showOnboarding && user && (
+        <OnboardingQuestions
+          user={user}
+          onComplete={() => setShowOnboarding(false)}
+        />
+      )}
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-white opacity-70" />
