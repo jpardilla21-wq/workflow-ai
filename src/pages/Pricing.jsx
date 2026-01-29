@@ -60,16 +60,11 @@ export default function Pricing() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-indigo-50">
       {/* Header */}
       <div className="max-w-6xl mx-auto px-6 lg:px-8 py-16 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 rounded-full mb-8">
-          <Sparkles className="w-4 h-4 text-indigo-600" />
-          <span className="text-sm font-medium text-indigo-900">Simple, Transparent Pricing</span>
-        </div>
-
         <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
-          Choose Your Plan
+          Simple, Transparent Pricing
         </h1>
         <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-          Start free, upgrade when you need more. No hidden fees, cancel anytime.
+          Choose the plan that fits your workflow needs. No hidden fees, upgrade anytime.
         </p>
       </div>
 
@@ -109,144 +104,140 @@ export default function Pricing() {
       )}
 
       {/* Pricing Cards */}
-      <div className="max-w-5xl mx-auto px-6 lg:px-8 pb-24">
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Free Plan */}
+      <div className="max-w-6xl mx-auto px-6 lg:px-8 pb-24">
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Starter Plan */}
           <Card className="border-2 border-slate-200 hover:border-slate-300 transition-all">
-            <CardHeader className="text-center pb-8 pt-8">
-              <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Zap className="w-8 h-8 text-slate-600" />
+            <CardHeader className="text-center pb-6 pt-8">
+              <CardTitle className="text-2xl mb-2 text-slate-900">Starter</CardTitle>
+              <p className="text-sm text-slate-600 mb-4">Perfect for individuals just starting out.</p>
+              <div className="mb-2">
+                <span className="text-5xl font-bold text-slate-900">$23</span>
+                <span className="text-slate-600">/mo</span>
               </div>
-              <CardTitle className="text-2xl mb-2">Free</CardTitle>
-              <div className="mb-4">
-                <span className="text-5xl font-bold text-slate-900">$0</span>
-                <span className="text-slate-600">/month</span>
-              </div>
-              <p className="text-slate-600">Perfect for trying out automation</p>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-4">
+              <Button variant="outline" className="w-full h-11">
+                Get Started
+              </Button>
+
+              <div className="space-y-3 pt-2">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">What's Included</p>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">5 AI-generated workflows per month</span>
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">500 AI Credits</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Access to basic templates</span>
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Standard Models (GPT-3.5)</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Save up to 5 workflows</span>
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Community Support</span>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">n8n & Make support</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Detailed setup guides</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">API documentation</span>
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Basic Analytics</span>
                 </div>
               </div>
-
-              {!user || user.subscription_tier === 'free' ? (
-                <Link to={createPageUrl('AIBuilder')}>
-                  <Button variant="outline" className="w-full h-12">
-                    Get Started Free
-                  </Button>
-                </Link>
-              ) : (
-                <Button variant="outline" className="w-full h-12" disabled>
-                  Current Plan
-                </Button>
-              )}
             </CardContent>
           </Card>
 
-          {/* Premium Plan */}
-          <Card className="border-2 border-indigo-500 hover:border-indigo-600 transition-all relative overflow-hidden shadow-xl">
+          {/* Pro Plan */}
+          <Card className="border-2 border-indigo-500 hover:border-indigo-600 transition-all relative overflow-hidden shadow-xl scale-105">
             {/* Popular Badge */}
-            <div className="absolute top-0 right-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-semibold px-6 py-2 rounded-bl-lg">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-xs font-semibold px-4 py-1 rounded-b-lg">
               MOST POPULAR
             </div>
 
-            <CardHeader className="text-center pb-8 pt-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Crown className="w-8 h-8 text-white" />
+            <CardHeader className="text-center pb-6 pt-10">
+              <CardTitle className="text-2xl mb-2 text-slate-900">Pro</CardTitle>
+              <p className="text-sm text-slate-600 mb-4">For power users who need more capabilities.</p>
+              <div className="mb-2">
+                <span className="text-5xl font-bold text-slate-900">$59</span>
+                <span className="text-slate-600">/mo</span>
               </div>
-              <CardTitle className="text-2xl mb-2">Premium</CardTitle>
-              <div className="mb-4">
-                <span className="text-5xl font-bold text-slate-900">$29</span>
-                <span className="text-slate-600">/month</span>
-              </div>
-              <p className="text-slate-600">For serious automation users</p>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-4">
+              <Button 
+                onClick={handleUpgrade}
+                disabled={loading}
+                className="w-full h-11 bg-indigo-600 hover:bg-indigo-700"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Get Started'
+                )}
+              </Button>
+
+              <div className="space-y-3 pt-2">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Everything in Starter, Plus</p>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700 font-medium">Unlimited AI-generated workflows</span>
+                  <span className="text-slate-700">2,500 AI Credits</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700 font-medium">Access to all 300+ templates</span>
+                  <span className="text-slate-700">Advanced Models (GPT-4)</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700 font-medium">Unlimited saved workflows</span>
+                  <span className="text-slate-700">Priority Email Support</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700 font-medium">Create workflows from images</span>
+                  <span className="text-slate-700">API Access</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700 font-medium">Advanced customizations</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">n8n & Make support</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Priority AI processing</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Advanced workflow features</span>
-                </div>
-                <div className="flex items-start gap-3">
-                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Email support</span>
+                  <span className="text-slate-700">Custom Workflows</span>
                 </div>
               </div>
+            </CardContent>
+          </Card>
 
-              {user && user.subscription_tier === 'premium' ? (
-                <Button className="w-full h-12 bg-indigo-600 hover:bg-indigo-700" disabled>
-                  Current Plan
-                </Button>
-              ) : (
-                <Button 
-                  onClick={handleUpgrade}
-                  disabled={loading}
-                  className="w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Processing...
-                    </>
-                  ) : (
-                    <>
-                      <Crown className="w-5 h-5 mr-2" />
-                      Upgrade to Premium
-                    </>
-                  )}
-                </Button>
-              )}
+          {/* Business Plan */}
+          <Card className="border-2 border-slate-200 hover:border-slate-300 transition-all">
+            <CardHeader className="text-center pb-6 pt-8">
+              <CardTitle className="text-2xl mb-2 text-slate-900">Business</CardTitle>
+              <p className="text-sm text-slate-600 mb-4">Scalable solutions for large teams.</p>
+              <div className="mb-2">
+                <span className="text-5xl font-bold text-slate-900">$179</span>
+                <span className="text-slate-600">/mo</span>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Button variant="outline" className="w-full h-11">
+                Contact Sales
+              </Button>
+
+              <div className="space-y-3 pt-2">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Everything in Pro, Plus</p>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">10,000 AI Credits</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Custom Fine-tuning</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Dedicated Account Manager</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">SSO & Advanced Security</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                  <span className="text-slate-700">SLA Guarantees</span>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
