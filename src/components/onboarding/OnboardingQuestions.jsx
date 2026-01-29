@@ -12,6 +12,7 @@ export default function OnboardingQuestions({ user, onComplete }) {
     company: '',
     company_size: '',
     role: '',
+    role_other: '',
     use_case: '',
     experience_level: '',
     goals: []
@@ -32,18 +33,18 @@ export default function OnboardingQuestions({ user, onComplete }) {
 
   const handleComplete = async () => {
     try {
+      const profileData = {
+        ...formData,
+        user_email: user.email,
+        role: formData.role === 'other' && formData.role_other ? formData.role_other : formData.role
+      };
+
       const existing = await base44.entities.UserProfile.filter({ user_email: user.email });
       
       if (existing.length > 0) {
-        await base44.entities.UserProfile.update(existing[0].id, {
-          ...formData,
-          user_email: user.email
-        });
+        await base44.entities.UserProfile.update(existing[0].id, profileData);
       } else {
-        await base44.entities.UserProfile.create({
-          ...formData,
-          user_email: user.email
-        });
+        await base44.entities.UserProfile.create(profileData);
       }
 
       const progressData = await base44.entities.UserProgress.filter({ user_email: user.email });
@@ -59,10 +60,11 @@ export default function OnboardingQuestions({ user, onComplete }) {
         });
       }
 
-      onComplete();
+      // Redirect to pricing page
+      window.location.href = '/Pricing';
     } catch (error) {
       console.error('Failed to save profile:', error);
-      onComplete();
+      window.location.href = '/Pricing';
     }
   };
 
@@ -114,33 +116,46 @@ export default function OnboardingQuestions({ user, onComplete }) {
       title: "What's your role?",
       description: "This helps us personalize your experience",
       fields: (
-        <div className="space-y-2">
-          <Label>Your Role</Label>
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              { value: 'founder', label: 'Founder/CEO' },
-              { value: 'developer', label: 'Developer' },
-              { value: 'product_manager', label: 'Product Manager' },
-              { value: 'operations', label: 'Operations' },
-              { value: 'marketing', label: 'Marketing' },
-              { value: 'other', label: 'Other' }
-            ].map(({ value, label }) => (
-              <button
-                key={value}
-                onClick={() => updateField('role', value)}
-                className={`px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all ${
-                  formData.role === value
-                    ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                    : 'border-slate-200 hover:border-slate-300'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label>Your Role</Label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: 'founder', label: 'Founder/CEO' },
+                { value: 'developer', label: 'Developer' },
+                { value: 'product_manager', label: 'Product Manager' },
+                { value: 'operations', label: 'Operations' },
+                { value: 'marketing', label: 'Marketing' },
+                { value: 'other', label: 'Other' }
+              ].map(({ value, label }) => (
+                <button
+                  key={value}
+                  onClick={() => updateField('role', value)}
+                  className={`px-4 py-3 rounded-lg border-2 text-sm font-medium transition-all ${
+                    formData.role === value
+                      ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
+                      : 'border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
+          {formData.role === 'other' && (
+            <div className="space-y-2">
+              <Label>Please specify your role</Label>
+              <Input
+                placeholder="e.g., Consultant, Designer, etc."
+                value={formData.role_other}
+                onChange={(e) => updateField('role_other', e.target.value)}
+                autoFocus
+              />
+            </div>
+          )}
         </div>
       ),
-      canProgress: formData.role
+      canProgress: formData.role && (formData.role !== 'other' || formData.role_other)
     },
     {
       icon: Target,

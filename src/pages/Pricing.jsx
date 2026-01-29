@@ -91,18 +91,6 @@ export default function Pricing() {
         </div>
       )}
 
-      {/* Current Plan Alert */}
-      {user && !success && !canceled && (
-        <div className="max-w-4xl mx-auto px-6 mb-8">
-          <Alert className="border-indigo-200 bg-indigo-50">
-            <Sparkles className="h-4 w-4 text-indigo-600" />
-            <AlertDescription className="text-indigo-900">
-              You're currently on the <strong>{user.subscription_tier === 'premium' ? 'Premium' : 'Free'}</strong> plan
-            </AlertDescription>
-          </Alert>
-        </div>
-      )}
-
       {/* Pricing Cards */}
       <div className="max-w-6xl mx-auto px-6 lg:px-8 pb-24">
         <div className="grid md:grid-cols-3 gap-6">
